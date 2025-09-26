@@ -4,7 +4,8 @@
   "description": "A simple GraphQL API built on Node.JS and Apollo Server",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "compile": "tsc",
+    "start": "npm run compile && node --env-file .env ./dist/index.js"
   },
   "repository": {
     "type": "git",
@@ -16,5 +17,22 @@
   "bugs": {
     "url": "https://github.com/dalonsog/movie-db-graphql/issues"
   },
-  "homepage": "https://github.com/dalonsog/movie-db-graphql#readme"
+  "homepage": "https://github.com/dalonsog/movie-db-graphql#readme",
+  "type": "module",
+  "dependencies": {
+    "@apollo/server": "^5.0.0",
+    "bcrypt": "^6.0.0",
+    "graphql": "^16.11.0",
+    "graphql-tag": "^2.12.6",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.16.3",
+    "sequelize": "^6.37.7",
+    "sequelize-cli": "^6.6.3",
+    "uuid": "^13.0.0"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "@types/node": "^24.5.2",
+    "typescript": "^5.9.2"
+  }
 }
