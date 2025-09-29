@@ -10,11 +10,7 @@ const directorSchema: ModelSchema = [
       defaultValue: DataTypes.UUIDV4,
       allowNull: false
     },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    lastname: {
+    fullname: {
       type: DataTypes.STRING,
       allowNull: false
     }

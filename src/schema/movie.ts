@@ -11,6 +11,7 @@ export default gql`
   }
 
   extend type Query {
-    books: [Book]
+    movie(id: ID!): Movie!
+    moviesByDirectorId(directorId: ID!): [Movie]!
   }
 `;

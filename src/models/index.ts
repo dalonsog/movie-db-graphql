@@ -4,7 +4,7 @@ import directorSchema from "./director.js";
 import userSchema from "./user.js";
 import reviewSchema from "./review.js";
 import { hashPassword } from "../utils/security.js";
-import { DBUser } from '../types.js';
+import { UserModel } from '../types.js';
 
 const host = process.env.POSTGRES_HOST;
 const port = process.env.POSTGRES_PORT;
@@ -22,14 +22,14 @@ const User = sequelize.define(...userSchema);
 const Review = sequelize.define(...reviewSchema);
 
 User.beforeCreate(async (user) => {
-  const hashedPassword = await hashPassword((user as DBUser).password);
-  (user as DBUser).password = hashedPassword;
+  const hashedPassword = await hashPassword((user as UserModel).password);
+  (user as UserModel).password = hashedPassword;
 });
 
 Director.hasMany(Movie, { onDelete: 'CASCADE' });
 User.hasMany(Review, { onDelete: 'CASCADE' });
 Movie.belongsTo(Director);
-Movie.hasMany(Review);
+Movie.hasMany(Review, { onDelete: 'CASCADE' });
 Review.belongsTo(User);
 Review.belongsTo(Movie);
 

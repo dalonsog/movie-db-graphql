@@ -7,9 +7,12 @@ export default gql`
     content: String!
     stars: Int!
     user: User!
+    movie: Movie!
   }
 
   extend type Query {
-    reviews: [Review]
+    review(id: ID!): Review!
+    reviewsByMovieId(movieId: ID!): [Review]!
+    reviewsByUserId(userId: ID!): [Review]!
   }
 `;

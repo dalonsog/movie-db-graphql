@@ -3,12 +3,12 @@ import { gql } from 'graphql-tag';
 export default gql`
   type Director {
     id: ID!
-    name: String!
-    lastname: String!
+    fullname: String!
     movies: [Movie!]!
   }
 
   extend type Query {
-    directors: [Director]
+    director(id: ID!): Director!
+    directors: [Director]!
   }
 `;

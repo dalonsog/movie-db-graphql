@@ -4,11 +4,12 @@ export default gql`
   type User {
     id: ID!
     username: String!
-    password: String!
+    role: String!
     reviews: [Review]!
   }
 
   extend type Query {
-    users: [User]
+    user(id: ID!): User!
+    users: [User]!
   }
 `;

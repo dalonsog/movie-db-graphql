@@ -16,34 +16,47 @@ export enum Role {
 };
 
 export interface IUser {
-  id: string
-  username: string
-  password: string
-  role: string
+  username: string;
+  role: Role;
 };
 
 export interface IReview {
-  id: string
-  title: string
-  content: string
-  stars: number
+  title: string;
+  content: string;
+  stars: number;
 };
 
 export interface IMovie {
-  id: string
-  title: string
-  genre: Genre
-  release: number
+  title: string;
+  genre: Genre;
+  release: number;
 };
 
 export interface IDirector {
-  id: string
-  name: string
-  lastname: string
+  fullname: string;
 };
 
-export interface DBUser extends IUser, Model {
-  id: string
-  username: string
-  password: string
+export interface UserModel extends IUser, Model {
+  id: string;
+  password: string;
+  getReviews: () => Promise<ReviewModel[]>;
+};
+
+export interface DirectorModel extends IDirector, Model {
+  id: string;
+  getMovies: () => Promise<MovieModel[]>;
+};
+
+export interface MovieModel extends IMovie, Model {
+  id: string;
+  getDirector: () => Promise<DirectorModel>;
+  getReviews: () => Promise<ReviewModel[]>;
+};
+
+export interface ReviewModel extends IReview, Model {
+  id: string;
+  movieId: string;
+  userId: string;
+  getUser: () => Promise<UserModel>;
+  getMovie: () => Promise<MovieModel>;
 };
