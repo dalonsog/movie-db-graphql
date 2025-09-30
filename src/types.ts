@@ -2,6 +2,18 @@ import { ModelAttributes, ModelOptions, Model } from "sequelize";
 
 export type ModelSchema = [string, ModelAttributes, ModelOptions];
 
+export type Resolver<T> = (
+  parent: Model,
+  args: {[key: string]: string | number},
+  context: ContextValue
+) => Promise<T>;
+
+export type ResolverDependency = (
+  parent: Model,
+  args: {[key: string]: string | number},
+  context: ContextValue
+) => void;
+
 export enum Genre {
   ADVENTURE = 'adventure',
   THRILLER = 'thriller',
@@ -60,3 +72,12 @@ export interface ReviewModel extends IReview, Model {
   getUser: () => Promise<UserModel>;
   getMovie: () => Promise<MovieModel>;
 };
+
+export interface Token {
+  token: string;
+};
+
+export interface ContextValue {
+  authUser: UserModel | null
+};
+

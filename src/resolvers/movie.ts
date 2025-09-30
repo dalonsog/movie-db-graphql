@@ -1,22 +1,17 @@
 import { Movie } from '../models/index.js';
-import { DirectorModel, MovieModel, ReviewModel } from '../types.js';
+import { DirectorModel, MovieModel, Resolver, ReviewModel } from '../types.js';
 
-const getMovieById: (
-  _: unknown,
-  args: { id: string}
-) => Promise<MovieModel> = async (_, { id }) => {
-  const movie = await Movie.findByPk(id) as MovieModel;
-  return movie;
+const getMovieById: Resolver<MovieModel> = async (_, { id }) => {
+  return await Movie.findByPk(id) as MovieModel;
 };
 
-const getMoviesByDirectorId: (
-  parent: unknown,
-  args: { directorId: string}
-) => Promise<MovieModel[]> = async (_, { directorId }) => {
-  const movies = await Movie.findAll({ 
+const getMoviesByDirectorId: Resolver<MovieModel[]> = async (
+  _,
+  { directorId }
+) => {
+  return await Movie.findAll({ 
     where: { DirectorId: directorId }
   }) as MovieModel[];
-  return movies;
 };
 
 export default {

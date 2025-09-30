@@ -9,10 +9,10 @@ const getDirectorById: (
   return director;
 };
 
-const getDirectors = async (): Promise<DirectorModel[]> => {
+const getDirectors: () => Promise<DirectorModel[]> = async () => {
   const directors = await Director.findAll() as DirectorModel[];
   return directors;
-}
+};
 
 export default {
   Query: {

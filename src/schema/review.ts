@@ -15,4 +15,8 @@ export default gql`
     reviewsByMovieId(movieId: ID!): [Review]!
     reviewsByUserId(userId: ID!): [Review]!
   }
+
+  extend type Mutation {
+    postReview(movieId: ID!, title: String!, content: String!, stars: Int!): Review!
+  }
 `;
