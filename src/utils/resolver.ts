@@ -1,11 +1,22 @@
-import { Resolver, ResolverDependency, Role } from '../types.js';
+import { Review } from '../models/index.js';
+import { Resolver, ResolverDependency, ReviewModel, Role } from '../types.js';
 
 export const authRequired: ResolverDependency = (_, __, { authUser }) => {
-  if (!authUser) throw new Error("Invalid token");
+  if (!authUser) throw new Error('Invalid token');
 };
 
 export const adminRequired: ResolverDependency = (_, __, { authUser }) => {
-  if (authUser?.role !== Role.ADMIN) throw new Error("Not enough privileges");
+  if (authUser?.role !== Role.ADMIN) throw new Error('Not enough privileges');
+};
+
+export const ownerRequired: ResolverDependency = async (
+  _,
+  { id },
+  { authUser }
+) => {
+  const review = await Review.findByPk(id) as ReviewModel;
+  if (!review || review.UserId !== authUser?.id)
+    throw new Error('You must be the owner of this review');
 };
 
 export const mergeResolvers: <T>(
@@ -14,7 +25,7 @@ export const mergeResolvers: <T>(
 ) => Resolver<T> = (resolver, deps) => {
   const fn: typeof resolver = async (parent, args, context) => {
     for (let dep of deps) {
-      dep(parent, args, context);
+      await dep(parent, args, context);
     }
     return await resolver(parent, args, context);
   }

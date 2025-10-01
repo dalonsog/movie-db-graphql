@@ -18,5 +18,7 @@ export default gql`
 
   extend type Mutation {
     postReview(movieId: ID!, title: String!, content: String!, stars: Int!): Review!
+    editReview(id: ID!, title: String, content: String, stars: Int): Review!
+    removeReview(id: ID!): ID!
   }
 `;

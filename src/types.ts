@@ -12,7 +12,7 @@ export type ResolverDependency = (
   parent: Model,
   args: {[key: string]: string | number},
   context: ContextValue
-) => void;
+) => void | Promise<void>;
 
 export enum Genre {
   ADVENTURE = 'adventure',
@@ -61,14 +61,15 @@ export interface DirectorModel extends IDirector, Model {
 
 export interface MovieModel extends IMovie, Model {
   id: string;
+  DirectorId: string;
   getDirector: () => Promise<DirectorModel>;
   getReviews: () => Promise<ReviewModel[]>;
 };
 
 export interface ReviewModel extends IReview, Model {
   id: string;
-  movieId: string;
-  userId: string;
+  MovieId: string;
+  UserId: string;
   getUser: () => Promise<UserModel>;
   getMovie: () => Promise<MovieModel>;
 };

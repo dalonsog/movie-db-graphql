@@ -11,4 +11,10 @@ export default gql`
     director(id: ID!): Director!
     directors: [Director]!
   }
+
+  extend type Mutation {
+    addDirector(fullname: String!): Director!
+    editDirector(id: ID!, fullname: String!): Director!
+    removeDirector(id: ID!): ID!
+  }
 `;

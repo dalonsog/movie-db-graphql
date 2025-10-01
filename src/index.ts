@@ -7,7 +7,13 @@ import { ContextValue } from './types.js';
 
 const server = new ApolloServer<ContextValue>({
   typeDefs,
-  resolvers
+  resolvers,
+  /*formatError: (formattedError, error) => {
+    console.log(formattedError);
+    console.log(error);
+    return formattedError;
+  },*/
+  includeStacktraceInErrorResponses: false
 });
 
 const { url } = await startStandaloneServer(server, {

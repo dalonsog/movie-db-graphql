@@ -14,4 +14,10 @@ export default gql`
     movie(id: ID!): Movie!
     moviesByDirectorId(directorId: ID!): [Movie]!
   }
+
+  extend type Mutation {
+    addMovie(directorId: ID!, title: String!, genre: String!, release: Int!): Movie!
+    editMovie(id: ID!, title: String, genre: String, release: Int, directorId: ID): Movie!
+    removeMovie(id: ID!): ID!
+  }
 `;
