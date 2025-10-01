@@ -1,3 +1,4 @@
+import { InvalidInputError } from '../utils/error.js';
 import { User } from '../models/index.js';
 import { ReviewModel, UserModel, Token, Resolver, Role } from '../types.js';
 import { generateToken, verifyPassword } from '../utils/security.js';
@@ -21,17 +22,20 @@ const login: (
   args: { username: string, password: string }
 ) => Promise<Token> = async (_, { username, password }) => {
   const user = await User.findOne({ where: { username } }) as UserModel;
-  if (!user) throw new Error("Invalid username/password combination")
+  if (!user)
+    throw new InvalidInputError("Invalid username/password combination");
 
   const isValid = await verifyPassword(password, user.password);
-  if (!isValid) throw new Error("Invalid username/password combination")
+  if (!isValid)
+    throw new InvalidInputError("Invalid username/password combination");
   
   return generateToken(user);
 };
 
 const createUser: Resolver<Token> = async (_, { username, password }) => {
   const user = await User.findOne({ where: { username } });
-  if (user) throw new Error(`User ${username} already exists.`);
+  if (user)
+    throw new InvalidInputError(`User ${username} already exists.`);
   
   const newUser = await User.create({ username, password, role: Role.USER });
   return generateToken(newUser as UserModel);

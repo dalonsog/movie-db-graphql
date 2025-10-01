@@ -1,3 +1,4 @@
+import { NotFoundError, InvalidInputError } from '../utils/error.js';
 import { Director, Movie } from '../models/index.js';
 import {
   DirectorModel,
@@ -31,19 +32,19 @@ const createMovie: Resolver<MovieModel> = async (
 ) => {
   const director = await Director.findByPk(directorId) as DirectorModel;
   if (!director)
-    throw new Error(`Director id ${directorId} not found.`);
+    throw new NotFoundError(`Director id ${directorId} not found.`);
 
   const movie = await Movie.findOne({
     where: { title, DirectorId: directorId }
   });
 
   if (movie)
-    throw new Error(
+    throw new InvalidInputError(
       `Movie ${title} with directorId=${directorId} already exists.`
     );
 
   if (!(Object.values(Genre).includes(genre as Genre)))
-    throw new Error(`Invalid genre ${genre}.`);
+    throw new InvalidInputError(`Invalid genre ${genre}.`);
 
   return await Movie.create({
     title,
@@ -59,15 +60,15 @@ const updateMovie: Resolver<MovieModel> = async (
 ) => {
   const movie = await Movie.findByPk(id) as MovieModel;
   if (!movie)
-    throw new Error(`Movie with id=${id} not found.`);
+    throw new NotFoundError(`Movie with id=${id} not found.`);
 
   if (genre && !(Object.values(Genre).includes(genre as Genre)))
-    throw new Error(`Invalid genre ${genre}.`);
+    throw new InvalidInputError(`Invalid genre ${genre}.`);
   
   if (directorId) {
     const director = await Director.findByPk(directorId) as DirectorModel;
     if (!director)
-      throw new Error(`Director with id=${directorId} not found.`);
+      throw new NotFoundError(`Director with id=${directorId} not found.`);
   }
 
   await movie.update({
@@ -83,7 +84,7 @@ const updateMovie: Resolver<MovieModel> = async (
 const deleteMovie: Resolver<String> = async (_, { id }) => {
   const movie = await Movie.findByPk(id) as MovieModel;
   if (!movie)
-    throw new Error(`Movie with id=${id} not found.`);
+    throw new NotFoundError(`Movie with id=${id} not found.`);
 
   await movie.destroy();
   return id as string;

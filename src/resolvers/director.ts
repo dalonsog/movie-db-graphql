@@ -1,3 +1,4 @@
+import { NotFoundError, InvalidInputError } from '../utils/error.js';
 import { Director } from '../models/index.js';
 import { DirectorModel, MovieModel, Resolver } from '../types.js';
 import {
@@ -12,7 +13,7 @@ const getDirectorById: (
 ) => Promise<DirectorModel> = async (_, { id }) => {
   const director = await Director.findByPk(id) as DirectorModel;
   if (!director)
-    throw new Error(`Director id ${id} not found.`);
+    throw new NotFoundError(`Director id ${id} not found.`);
   return director;
 };
 
@@ -26,7 +27,7 @@ const createDirector: Resolver<DirectorModel> = async (_, { fullname }) => {
     where: { fullname }
   }) as DirectorModel;
   if (director)
-    throw new Error(`Director ${fullname} already exists.`);
+    throw new InvalidInputError(`Director ${fullname} already exists.`);
   
   return await Director.create({ fullname }) as DirectorModel;
 };
@@ -34,7 +35,7 @@ const createDirector: Resolver<DirectorModel> = async (_, { fullname }) => {
 const updateDirector: Resolver<DirectorModel> = async (_, { id, fullname }) => {
   const director = await Director.findByPk(id) as DirectorModel;
   if (!director)
-    throw new Error(`Director with id=${fullname} not found.`);
+    throw new NotFoundError(`Director with id=${fullname} not found.`);
 
   await director.update({ fullname });
   
@@ -44,7 +45,7 @@ const updateDirector: Resolver<DirectorModel> = async (_, { id, fullname }) => {
 const deleteDirector: Resolver<String> = async (_, { id }) => {
   const director = await Director.findByPk(id) as DirectorModel;
   if (!director)
-    throw new Error(`Director id ${id} not found.`);
+    throw new NotFoundError(`Director id ${id} not found.`);
   await director.destroy();
   return id as string;
 };

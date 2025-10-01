@@ -1,12 +1,15 @@
+import { AuthenticationError, AuthorizationError } from './error.js';
 import { Review } from '../models/index.js';
 import { Resolver, ResolverDependency, ReviewModel, Role } from '../types.js';
 
 export const authRequired: ResolverDependency = (_, __, { authUser }) => {
-  if (!authUser) throw new Error('Invalid token');
+  if (!authUser)
+    throw new AuthenticationError('Invalid token');
 };
 
 export const adminRequired: ResolverDependency = (_, __, { authUser }) => {
-  if (authUser?.role !== Role.ADMIN) throw new Error('Not enough privileges');
+  if (authUser?.role !== Role.ADMIN)
+    throw new AuthorizationError('Not enough privileges');
 };
 
 export const ownerRequired: ResolverDependency = async (
@@ -16,7 +19,7 @@ export const ownerRequired: ResolverDependency = async (
 ) => {
   const review = await Review.findByPk(id) as ReviewModel;
   if (!review || review.UserId !== authUser?.id)
-    throw new Error('You must be the owner of this review');
+    throw new AuthorizationError('You must be the owner of this review');
 };
 
 export const mergeResolvers: <T>(
