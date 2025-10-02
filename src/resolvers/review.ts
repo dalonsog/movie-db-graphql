@@ -8,6 +8,7 @@ import {
   getPaginatedResponse
 } from '../utils/index.js';
 import {
+  ContextValue,
   MovieModel,
   PaginatedResponse,
   Resolver,
@@ -107,11 +108,19 @@ export default {
     removeReview: mergeResolvers(deleteReview, [authRequired, ownerRequired])
   },
   Review: {
-    user: async (review: ReviewModel): Promise<UserModel> => {
-      return await review.getUser();
+    user: async (
+      review: ReviewModel,
+      _: unknown,
+      context: ContextValue
+    ): Promise<UserModel> => {
+      return await context.loaders.user.load(review.UserId) as UserModel;
     },
-    movie: async (review: ReviewModel): Promise<MovieModel> => {
-      return await review.getMovie();
+    movie: async (
+      review: ReviewModel,
+      _: unknown,
+      context: ContextValue
+    ): Promise<MovieModel> => {
+      return await context.loaders.movie.load(review.UserId) as MovieModel;
     }
   }
 };

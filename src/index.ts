@@ -4,6 +4,7 @@ import typeDefs from './schema/index.js';
 import resolvers from './resolvers/index.js';
 import { getAuthUser } from './utils/index.js';
 import { ContextValue } from './types.js';
+import { userLoader, movieLoader } from './loaders/index.js';
 
 const server = new ApolloServer<ContextValue>({
   typeDefs,
@@ -22,7 +23,13 @@ const { url } = await startStandaloneServer(server, {
     const auth = req.headers.authorization || '';
     const token = auth.split(' ')[1];
     const user = getAuthUser(token);
-    return { authUser: user };    
+    return { 
+      authUser: user,
+      loaders: {
+        user: userLoader,
+        movie: movieLoader
+      }
+    };
   }
 });
 

@@ -1,8 +1,12 @@
-import { InvalidInputError } from '../utils/index.js';
 import { User } from '../models/index.js';
 import { ReviewModel, UserModel, Token, Resolver, Role } from '../types.js';
-import { generateToken, verifyPassword } from '../utils/index.js';
-import { authRequired, mergeResolvers } from '../utils/index.js';
+import {
+  generateToken,
+  verifyPassword,
+  authRequired,
+  mergeResolvers,
+  InvalidInputError
+} from '../utils/index.js';
 
 const getUserById: Resolver<UserModel> = async (_, { id }) => {
   return await User.findByPk(id) as UserModel;

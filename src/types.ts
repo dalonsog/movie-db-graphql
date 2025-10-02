@@ -1,4 +1,5 @@
-import { ModelAttributes, ModelOptions, Model } from "sequelize";
+import DataLoader from 'dataloader';
+import { ModelAttributes, ModelOptions, Model } from 'sequelize';
 
 export type ModelSchema = [string, ModelAttributes, ModelOptions];
 
@@ -97,5 +98,8 @@ export interface Token {
 };
 
 export interface ContextValue {
-  authUser: UserModel | null
+  authUser: UserModel | null;
+  loaders: {
+    [key: string]: DataLoader<string, DBModel>;
+  }
 };
