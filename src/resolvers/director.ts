@@ -1,11 +1,11 @@
-import { NotFoundError, InvalidInputError } from '../utils/error.js';
+import { NotFoundError, InvalidInputError } from '../utils/index.js';
 import { Director } from '../models/index.js';
 import { DirectorModel, MovieModel, Resolver } from '../types.js';
 import {
   adminRequired,
   authRequired,
   mergeResolvers
-} from '../utils/resolver.js';
+} from '../utils/index.js';
 
 const getDirectorById: (
   _: unknown,

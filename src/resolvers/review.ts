@@ -1,25 +1,59 @@
-import { NotFoundError } from '../utils/error.js';
 import { Movie, Review } from '../models/index.js';
-import { MovieModel, Resolver, ReviewModel, UserModel } from '../types.js';
-import { authRequired, mergeResolvers, ownerRequired } from '../utils/resolver.js';
+import {
+  authRequired,
+  mergeResolvers,
+  ownerRequired,
+  NotFoundError,
+  getCursorOptions,
+  getPaginatedResponse
+} from '../utils/index.js';
+import {
+  MovieModel,
+  PaginatedResponse,
+  Resolver,
+  ReviewModel,
+  UserModel
+} from '../types.js';
 
 const getReviewById: Resolver<ReviewModel> = async (_, { id }) => {
   const review = await Review.findByPk(id) as ReviewModel;
   return review;
 };
 
-const getReviewsByMovieId: Resolver<ReviewModel[]> = async (_, { movieId }) => {
-  const reviews = await Review.findAll({ 
-    where: { MovieId: movieId }
+const getReviewsByMovieId: Resolver<PaginatedResponse<ReviewModel>> = async (
+  _,
+  { movieId, cursor, limit = 100 }
+) => {
+  const cursorOptions = getCursorOptions(cursor as string);
+
+  const reviews = await Review.findAll({
+    order: [['createdAt', 'DESC']],
+    limit: (limit as number) + 1, 
+    where: { 
+      MovieId: movieId,
+      ...cursorOptions
+    }
   }) as ReviewModel[];
-  return reviews;
+
+  return getPaginatedResponse(reviews, limit as number);
 };
 
-const getReviewsByUserId: Resolver<ReviewModel[]> = async (_, { userId }) => {
+const getReviewsByUserId: Resolver<PaginatedResponse<ReviewModel>> = async (
+  _,
+  { userId, cursor, limit = 100 }
+) => {
+  const cursorOptions = getCursorOptions(cursor as string);
+  
   const reviews = await Review.findAll({ 
-    where: { UserId: userId }
+    order: [['createdAt', 'DESC']],
+    limit: (limit as number) + 1, 
+    where: {
+      UserId: userId,
+      ...cursorOptions
+    }
   }) as ReviewModel[];
-  return reviews;
+
+  return getPaginatedResponse(reviews, limit as number);
 };
 
 const createReview: Resolver<ReviewModel> = async (

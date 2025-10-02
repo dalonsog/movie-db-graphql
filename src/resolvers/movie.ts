@@ -1,4 +1,4 @@
-import { NotFoundError, InvalidInputError } from '../utils/error.js';
+import { NotFoundError, InvalidInputError } from '../utils/index.js';
 import { Director, Movie } from '../models/index.js';
 import {
   DirectorModel,
@@ -11,7 +11,7 @@ import {
   adminRequired,
   authRequired,
   mergeResolvers
-} from '../utils/resolver.js';
+} from '../utils/index.js';
 
 const getMovieById: Resolver<MovieModel> = async (_, { id }) => {
   return await Movie.findByPk(id) as MovieModel;

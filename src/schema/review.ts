@@ -10,10 +10,20 @@ export default gql`
     movie: Movie!
   }
 
+  type PageInfo {
+    hasNextPage: Boolean!
+    endCursor: String!
+  }
+
+  type ReviewResponse {
+    edges: [Review!]!
+    pageInfo: PageInfo!
+  }
+
   extend type Query {
     review(id: ID!): Review!
-    reviewsByMovieId(movieId: ID!): [Review]!
-    reviewsByUserId(userId: ID!): [Review]!
+    reviewsByMovieId(movieId: ID!, cursor: String, limit: Int): ReviewResponse!
+    reviewsByUserId(userId: ID!, cursor: String, limit: Int): ReviewResponse!
   }
 
   extend type Mutation {

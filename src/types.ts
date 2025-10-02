@@ -14,6 +14,22 @@ export type ResolverDependency = (
   context: ContextValue
 ) => void | Promise<void>;
 
+export interface PaginatedResponse<T> {
+  edges: T[];
+  pageInfo: PageInfo;
+};
+
+export interface CursorOptions {
+  createdAt?: {
+    [key: symbol]: Date
+  }
+};
+
+export interface PageInfo {
+  hasNextPage: boolean;
+  endCursor: string;
+};
+
 export enum Genre {
   ADVENTURE = 'adventure',
   THRILLER = 'thriller',
@@ -48,26 +64,28 @@ export interface IDirector {
   fullname: string;
 };
 
-export interface UserModel extends IUser, Model {
+export interface DBModel extends Model {
   id: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+export interface UserModel extends IUser, DBModel {
   password: string;
   getReviews: () => Promise<ReviewModel[]>;
 };
 
-export interface DirectorModel extends IDirector, Model {
-  id: string;
+export interface DirectorModel extends IDirector, DBModel {
   getMovies: () => Promise<MovieModel[]>;
 };
 
-export interface MovieModel extends IMovie, Model {
-  id: string;
+export interface MovieModel extends IMovie, DBModel {
   DirectorId: string;
   getDirector: () => Promise<DirectorModel>;
   getReviews: () => Promise<ReviewModel[]>;
 };
 
-export interface ReviewModel extends IReview, Model {
-  id: string;
+export interface ReviewModel extends IReview, DBModel {
   MovieId: string;
   UserId: string;
   getUser: () => Promise<UserModel>;
@@ -81,4 +99,3 @@ export interface Token {
 export interface ContextValue {
   authUser: UserModel | null
 };
-
