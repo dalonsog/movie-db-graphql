@@ -4,7 +4,6 @@ import { User } from "../models/index.js";
 import { UserModel } from "../types.js";
 
 const batchUsers = async (ids: string[]) => {
-  console.log('CACHEO!!!');
   const users = await User.findAll({
     where: { id: { [Sequelize.Op.in]: ids } }
   }) as UserModel[];

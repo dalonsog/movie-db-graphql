@@ -1,5 +1,5 @@
 import Sequelize from 'sequelize';
-import { DBModel, PaginatedResponse, CursorOptions } from "../types";
+import { DBModel, PaginatedResponse, CursorOptions } from "../types.js";
 
 export const toCursorHash: (
   string: string

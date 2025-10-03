@@ -1,16 +1,18 @@
-import { NotFoundError, InvalidInputError } from '../utils/index.js';
 import { Director, Movie } from '../models/index.js';
 import {
   DirectorModel,
   MovieModel,
   Resolver,
   ReviewModel,
-  Genre
+  Genre,
+  ContextValue
 } from '../types.js';
 import { 
   adminRequired,
   authRequired,
-  mergeResolvers
+  mergeResolvers,
+  NotFoundError,
+  InvalidInputError
 } from '../utils/index.js';
 
 const getMovieById: Resolver<MovieModel> = async (_, { id }) => {
@@ -101,8 +103,14 @@ export default {
     removeMovie: mergeResolvers(deleteMovie, [authRequired, adminRequired])
   },
   Movie: {
-    director: async (movie: MovieModel): Promise<DirectorModel> => {
-      return await movie.getDirector();
+    director: async (
+      movie: MovieModel,
+      _: unknown,
+      context: ContextValue
+    ): Promise<DirectorModel> => {
+      return await context.loaders.director.load(
+        movie.DirectorId
+      ) as DirectorModel;
     },
     reviews: async (movie: MovieModel): Promise<ReviewModel[]> => {
       return await movie.getReviews();

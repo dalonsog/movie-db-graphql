@@ -1,4 +1,4 @@
-import { Movie, Review } from '../models/index.js';
+import { User, Movie, Review } from '../models/index.js';
 import {
   authRequired,
   mergeResolvers,
@@ -7,6 +7,7 @@ import {
   getCursorOptions,
   getPaginatedResponse
 } from '../utils/index.js';
+import { pubsub, events } from '../subscriptions/index.js';
 import {
   ContextValue,
   MovieModel,
@@ -65,13 +66,17 @@ const createReview: Resolver<ReviewModel> = async (
   const movie = await Movie.findByPk(movieId);
   if (!movie) throw new NotFoundError(`Movie with id=${movieId} not found`);
 
-  return await Review.create({
+  const newReview = await Review.create({
     title,
     content,
     stars,
     MovieId: movieId,
     UserId: authUser?.id
   }) as ReviewModel;
+
+  pubsub.publish(events.review.reviewCreated, { reviewCreated: newReview});
+
+  return newReview;
 };
 
 const updateReview: Resolver<ReviewModel> = async (
@@ -107,20 +112,31 @@ export default {
     editReview: mergeResolvers(updateReview, [authRequired, ownerRequired]),
     removeReview: mergeResolvers(deleteReview, [authRequired, ownerRequired])
   },
+  Subscription: {
+    reviewCreated: {
+      subscribe: () => pubsub.asyncIterableIterator(events.review.reviewCreated)
+    }
+  },
   Review: {
     user: async (
       review: ReviewModel,
       _: unknown,
       context: ContextValue
     ): Promise<UserModel> => {
-      return await context.loaders.user.load(review.UserId) as UserModel;
+      if (context)
+        return await context.loaders.user.load(review.UserId) as UserModel;
+      else
+        return await User.findByPk(review.UserId) as UserModel;
     },
     movie: async (
       review: ReviewModel,
       _: unknown,
       context: ContextValue
     ): Promise<MovieModel> => {
-      return await context.loaders.movie.load(review.UserId) as MovieModel;
+      if (context)
+        return await context.loaders.movie.load(review.UserId) as MovieModel;
+      else
+        return await Movie.findByPk(review.MovieId) as MovieModel;
     }
   }
 };

@@ -3,8 +3,7 @@ import Sequelize from "sequelize";
 import { Movie } from "../models/index.js";
 import { MovieModel } from "../types.js";
 
-const batchUsers = async (ids: string[]) => {
-  console.log('CACHEO!!!');
+const batchMovies = async (ids: string[]) => {
   const movies = await Movie.findAll({
     where: { id: { [Sequelize.Op.in]: ids } }
   }) as MovieModel[];
@@ -13,5 +12,5 @@ const batchUsers = async (ids: string[]) => {
 };
 
 export const movieLoader = new DataLoader(
-  ids => batchUsers(ids as string[])
+  ids => batchMovies(ids as string[])
 ) as DataLoader<string, MovieModel>;

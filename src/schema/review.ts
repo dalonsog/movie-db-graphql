@@ -31,4 +31,8 @@ export default gql`
     editReview(id: ID!, title: String, content: String, stars: Int): Review!
     removeReview(id: ID!): ID!
   }
+
+  extend type Subscription {
+    reviewCreated: Review!
+  }
 `;
