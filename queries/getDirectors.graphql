@@ -1,0 +1,12 @@
+query GetDirectors {
+  directors {
+    id
+    fullname
+    movies {
+      id
+      title
+      genre
+      release
+    }
+  }
+}
