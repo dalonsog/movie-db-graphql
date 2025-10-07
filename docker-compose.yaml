@@ -8,6 +8,16 @@ services:
       - db:/var/lib/postgresql/data
     env_file: 
       - .env
+  app:
+    container_name: app
+    build: .
+    restart: always
+    ports:
+      - '4000:4000'
+    depends_on:
+      - db
+    env_file:
+      - .env
 volumes:
   db:
     driver: local

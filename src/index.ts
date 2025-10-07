@@ -9,12 +9,15 @@ import {
 import { expressMiddleware } from '@as-integrations/express5';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import { useServer } from 'graphql-ws/use/ws';
-import {WebSocketServer} from 'ws';
+import { WebSocketServer } from 'ws';
 import typeDefs from './schema/index.js';
 import resolvers from './resolvers/index.js';
 import { getAuthUser } from './utils/index.js';
 import { ContextValue } from './types.js';
 import { userLoader, movieLoader, directorLoader } from './loaders/index.js';
+
+const GRAPHQL_PATH = process.env.GRAPHQL_PATH as string;
+const PORT = parseInt(process.env.SERVER_PORT as string);
 
 const app = express();
 const httpServer = createServer(app);
@@ -23,7 +26,7 @@ const schema = makeExecutableSchema({ typeDefs, resolvers });
 
 const wsServer = new WebSocketServer({
   server: httpServer,
-  path: '/graphql'
+  path: GRAPHQL_PATH
 });
 const serverCleanup = useServer({ schema }, wsServer);
 
@@ -47,10 +50,10 @@ const server = new ApolloServer<ContextValue>({
 await server.start();
 
 app.use(cors<cors.CorsRequest>());
-app.use(morgan('dev'));
+app.use(morgan(process.env.NODE_ENV === 'production' ? 'common' : 'dev'));
 app.use(express.json());
 app.use(
-  '/graphql',
+  GRAPHQL_PATH,
   expressMiddleware(server, {
     context: async ({ req }) => {
       const auth = req.headers.authorization || '';
@@ -68,6 +71,6 @@ app.use(
   })
 );
 
-httpServer.listen(4000, () => {
-  console.log('Apollo Server on http://localhost:4000/graphql');
+httpServer.listen(PORT, () => {
+  console.log(`Apollo Server on http://localhost:${PORT}${GRAPHQL_PATH}`);
 });

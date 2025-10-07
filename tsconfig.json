@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "rootDirs": ["src"],
+    "rootDir": "src",
     "outDir": "dist",
     "lib": ["es2023"],
     "target": "es2023",
@@ -17,5 +17,6 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "types": ["node"]
-  }
+  },
+  "exclude": ["patch"]
 }
