@@ -1,0 +1,22 @@
+query GetCurrentUser {
+  me {
+    id
+    username
+    role
+    reviews {
+      id
+      title
+      content
+      stars
+      movie {
+        id
+        title
+        release
+        director {
+          id
+          fullname
+        }
+      }
+    }
+  }
+}

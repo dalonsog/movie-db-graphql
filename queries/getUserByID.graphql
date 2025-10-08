@@ -1,0 +1,16 @@
+query GetUserByID($userId: ID!) {
+  user(id: $userId) {
+    username
+    role
+    reviews {
+      id
+      title
+      content
+      stars
+      movie {
+        id
+        title
+      }
+    }
+  }
+}

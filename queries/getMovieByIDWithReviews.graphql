@@ -1,0 +1,18 @@
+query GetMovieByIDWithReviews($movieId: ID!) {
+  movie(id: $movieId) {
+    id
+    title
+    genre
+    release
+    reviews {
+      id
+      title
+      content
+      stars
+      user {
+        id
+        username
+      }
+    }
+  }
+}

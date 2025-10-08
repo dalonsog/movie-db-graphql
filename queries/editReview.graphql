@@ -1,0 +1,8 @@
+mutation EditReview($editReviewId: ID!, $title: String, $content: String, $stars: Int) {
+  editReview(id: $editReviewId, title: $title, content: $content, stars: $stars) {
+    id
+    title
+    content
+    stars
+  }
+}

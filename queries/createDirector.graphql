@@ -1,0 +1,6 @@
+mutation CreateDirector($fullname: String!) {
+  addDirector(fullname: $fullname) {
+    id
+    fullname
+  }
+}

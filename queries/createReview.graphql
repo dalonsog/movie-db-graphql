@@ -1,0 +1,8 @@
+mutation PostReview($movieId: ID!, $title: String!, $content: String!, $stars: Int!) {
+  postReview(movieId: $movieId, title: $title, content: $content, stars: $stars) {
+    id
+    title
+    content
+    stars
+  }
+}

@@ -1,0 +1,3 @@
+mutation RemoveMovie($removeMovieId: ID!) {
+  removeMovie(id: $removeMovieId)
+}

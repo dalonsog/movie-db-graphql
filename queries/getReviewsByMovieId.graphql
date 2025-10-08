@@ -1,0 +1,18 @@
+query GetReviewsByMovieID($movieId: ID!, $cursor: String, $limit: Int = 100) {
+  reviewsByMovieId(movieId: $movieId, cursor: $cursor, limit: $limit) {
+    edges {
+      id
+      title
+      content
+      stars
+      user {
+        id
+        username
+      }
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}

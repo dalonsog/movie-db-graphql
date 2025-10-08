@@ -33,6 +33,7 @@ const serverCleanup = useServer({ schema }, wsServer);
 const server = new ApolloServer<ContextValue>({
   schema,
   includeStacktraceInErrorResponses: false,
+  
   plugins: [
     ApolloServerPluginDrainHttpServer({ httpServer }),
     {

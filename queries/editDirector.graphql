@@ -1,0 +1,6 @@
+mutation EditDirector($editDirectorId: ID!, $fullname: String!) {
+  editDirector(id: $editDirectorId, fullname: $fullname) {
+    id
+    fullname
+  }
+}

@@ -1,0 +1,8 @@
+query GetMoviesByDirectorID($directorId: ID!) {
+  moviesByDirectorId(directorId: $directorId) {
+    id
+    title
+    genre
+    release
+  }
+}

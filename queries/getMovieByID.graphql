@@ -1,0 +1,8 @@
+query GetMovieByID($movieId: ID!) {
+  movie(id: $movieId) {
+    id
+    title
+    genre
+    release
+  }
+}

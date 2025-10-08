@@ -1,0 +1,8 @@
+mutation EditMovie($editMovieId: ID!, $title: String, $genre: String, $release: Int, $directorId: ID) {
+  editMovie(id: $editMovieId, title: $title, genre: $genre, release: $release, directorId: $directorId) {
+    id
+    title
+    genre
+    release
+  }
+}

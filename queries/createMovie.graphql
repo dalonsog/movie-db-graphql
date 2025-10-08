@@ -1,0 +1,8 @@
+mutation AddMovie($directorId: ID!, $title: String!, $genre: String!, $release: Int!) {
+  addMovie(directorId: $directorId, title: $title, genre: $genre, release: $release) {
+    id
+    title
+    genre
+    release
+  }
+}
